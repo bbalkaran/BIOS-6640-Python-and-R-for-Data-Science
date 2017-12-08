@@ -461,3 +461,55 @@ Districts <- rep(district_list, length.out = 392204, each = 2762)
 
 # long weather dataset
 masterdataset <- cbind(Districts, masterdataset)
+
+masterdataset$date <- paste(masterdataset$year, masterdataset$mo, sep="/")
+masterdataset$date2 <- paste(masterdataset$date, masterdataset$day, sep="/")
+masterdataset$date3 <- as.Date(masterdataset$date2, format="%Y/%m/%d")
+
+# Create Epiweek and Epiyear variables
+
+install.packages("EpiWeek")
+library(EpiWeek)
+
+epiweek <- dateToEpiweek(masterdataset$date3, format = "%Y-%m-%d", firstday = "Sunday")
+
+masterdataset["epi_wk"] <- epiweek[2]
+
+
+masterdataset["epi_yr"] <- epiweek[1] # need to drop unused columns
+
+
+
+#weekly averages of temp
+
+temp_avg <- aggregate(masterdataset$tavg ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
+colnames(temp_avg) <- c("District", "Epi Year", "Epi Week", "Avg Temp (C)")
+
+# weekly averages of rainfall
+
+rain_avg <- aggregate(masterdataset$raint ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
+colnames(rain_avg) <- c("District", "Epi Year", "Epi Week", "Rainfall Total (mm/wk)")
+
+weather_data_by_epiweek <- cbind(temp_avg, rain_avg[4])
+
+#weekly averages of rel humidity
+
+rel_humidity_avg <- aggregate(masterdataset$rh ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
+colnames(rel_humidity_avg) <- c("District", "Epi Year", "Epi Week", "Relative humidity (%)")
+
+weather_data_by_epiweek <- cbind(weather_data_by_epiweek, rel_humidity_avg[4])
+
+#weekly averages of saturation vappor pressure deficit 
+
+sat_vap_press_def_avg <- aggregate(masterdataset$sd ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
+colnames(sat_vap_press_def_avg) <- c("District", "Epi Year", "Epi Week", "Saturation Vapor Pressure (mmHg) ")
+
+weather_data_by_epiweek <- cbind(weather_data_by_epiweek, sat_vap_press_def_avg[4])
+
+# weekly averages of surface barometric pressure
+
+surf_baromet_press_avg <- aggregate(masterdataset$sd ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
+colnames(surf_baromet_press_avg) <- c("District", "Epi Year", "Epi Week", "Surface Barometric Pressure (hPa) ")
+
+weather_data_by_epiweek <- cbind(weather_data_by_epiweek, surf_baromet_press_avg[4])
+
