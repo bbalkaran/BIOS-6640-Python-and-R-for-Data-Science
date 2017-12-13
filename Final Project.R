@@ -1,29 +1,30 @@
 # R and Python Final Project
 # BIOS 6640 
-#Bridget Balkaran
+# Bridget Balkaran
+# Read in intervention, Incidence, and Weather Data and Merge
 ----------------------------
 
-
+setwd("~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/Project Data")
 # Create list of text files
 file_list <- list.files(path= "~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/Project Data", pattern="*.txt")                 
 
 # Create vector of district names
-district_list <- c("Alto Molocue","Ancuabe", "Angoche", "Angonia", "Balama", "Barue", "Bilene Macia", "Boane", 
-                   "Buzi", "Cahora Bassa", "Caia", "Changara", "Chemba", "Cheringoma", "Chibabava", "Chibuto", 
-                   "Chicualacuala", "Chifunde", "Chigubo", "Chinde", "Chiure", "Chiuta", "Chokwe", "Cidade de Matola", 
-                   "Cidade de Beira", "Cidade de Chimoio", "Cidade de Inhambane", "Cidade de Lichinga", "Cidade de Maputo", 
-                   "Cidade de Maxixe", "Cidade de Nacala", "Cidade de Nampula", "Cidade de Pemba", "Cidade de Quelimane", 
-                   "Cidade de Tete", "Cidade de Xai Xai", "Corongosa", "Cuamba", "Dondo", "Funhalouro", "Gile", "Gondola", 
-                   "Govuro", "Guija", "Guro", "Gurue", "Homoine", "Ibo", "Ile", "Ilha", "Inharrime", "Inhassoro", "Inhassunge", 
-                   "Jangamo", "Lago", "Lalaua", "Lichinga", "Lugela", "Mabalane", "Mabote", "Macanga", "Machanga", "Machaze",
-                   "Macomia", "Macossa", "Maganja da Costa", "Magoe", "Magude", "Majune", "Malema", "Mandimba", "Mandlacaze", "Manhia", "Manica", 
-                   "Maravia", "Maringue", "Marracuene", "Marromeu", "Marrupa", "Massangena", "Massinga", "Massingir", "Matutuine", "Maua", 
-                   "Mavago", "Mecanhelas", "Meconta", "Mecuburi", "Mecufi", "Mecula", "Meluco", "Memba", "Metarica", "Minlange", "Moamba", 
-                   "Moatize", "Mocimboa", "Mocuba", "Mogincual", "Mogovolas", "Moma", "Monapo", "Montepuez", "Mopeia", "Morrumbala", 
-                   "Morrumbene", "Mossuril", "Mossurize", "Muanza", "Muecate", "Mueda", "Muembe", "Muidumbe", "Murrupula", "Mutarara",
-                   "Nacala", "Nacaroa", "Namaacha", "Namacurra", "Namapa Erati", "Namaroi", "Namuno", "Nangade", "Ngauma", "Nhamatanda", 
-                   "Nicoadala", "Nipepe", "Palma", "Panda", "Pebane", "Pemba", "Quissanga", "Rapale Nampula", "Ribaue", "Sanga", "Sussundenga", 
-                   "Tambara", "Tsangano", "Vilankulo", "Xai Xai", "Zavala", "Zumbo")
+district_list <- c("ALTO MOLOCUE","ANCUABE", "ANGOCHE", "ANGONIA", "BALAMA", "BARUE", "BILENE MACIA", "BOANE", 
+                   "BUZI", "CAHORA BASSA", "CAIA", "CHANGARA", "CHEMBA", "CHERINGOMA", "CHIBABAVA", "CHIBUTO", 
+                   "CHICUALACUALA", "CHIFUNDE", "CHIGUBO", "CHINDE", "CHIURE", "CHIUTA", "CHOKWE", "CIDADE DA MATOLA", 
+                   "CIDADE DE BEIRA", "CIDADE DE CHIMOIO", "CIDADE DE INHAMBANE", "CIDADE DE LICHINGA", "CIDADE DE MAPUTO", 
+                   "CIDADE DE MAXIXE", "CIDADE DE NACALA PORTO", "CIDADE DE NAMPULA", "CIDADE DE PEMBA", "CIDADE DE QUELIMANE", 
+                   "CIDADE DE TETE", "CIDADE DE XAI XAI", "CORONGOSA", "CUAMBA", "DONDO", "FUNHALOURO", "GILE", "GONDOLA", 
+                   "GOVURO", "GUIJA", "GURO", "GURUE", "HOMOINE", "IBO", "ILE", "ILHA DE MOAMBIQUE", "INHARRIME", "INHASSORO", "INHASSUNGE", 
+                   "JANGAMO", "LAGO", "LALAUA", "LICHINGA", "LUGELA", "MABALANE", "MABOTE", "MACANGA", "MACHANGA", "MACHAZE",
+                   "MACOMIA", "MACOSSA", "MAGANJA DA COSTA", "MAGOE", "MAGUDE", "MAJUNE", "MALEMA", "MANDIMBA", "MANDLACAZE", "MANHIA", "MANICA", 
+                   "MARAVIA", "MARINGUE", "MARRACUENE", "MARROMEU", "MARRUPA", "MASSANGENA", "MASSINGA", "MASSINGIR", "MATUTUINE", "MAUA", 
+                   "MAVAGO", "MECANHELAS", "MECONTA", "MECUBURI", "MECUFI", "MECULA", "MELUCO", "MEMBA", "METARICA", "MILANGE", "MOAMBA", 
+                   "MOATIZE", "MOCIMBOA DA PRAIA", "MOCUBA", "MOGINCUAL", "MOGOVOLAS", "MOMA", "MONAPO", "MONTEPUEZ", "MOPEIA", "MORRUMBALA", 
+                   "MORRUMBENE", "MOSSURIL", "MOSSURIZE", "MUANZA", "MUECATE", "MUEDA", "MUEMBE", "MUIDUMBE", "MURRUPULA", "MUTARARA",
+                   "NACALA VELHA", "NACAROA", "NAMAACHA", "NAMACURRA", "NAMAPA ERATI", "NAMAROI", "NAMUNO", "NANGADE", "NGAUMA", "NHAMATANDA", 
+                   "NICOADALA", "NIPEPE", "PALMA", "PANDA", "PEBANE", "PEMBA", "QUISSANGA", "RAPALE NAMPULA", "RIBAUE", "SANGA", "SUSSUNDENGA", 
+                   "TAMBARA", "TSANGANO", "VILANKULO", "XAI XAI", "ZAVALA", "ZUMBO")
 
 # initialize empty DFs
 masterdataset <- NULL
@@ -468,48 +469,244 @@ masterdataset$date3 <- as.Date(masterdataset$date2, format="%Y/%m/%d")
 
 # Create Epiweek and Epiyear variables
 
-install.packages("EpiWeek")
+#install.packages("EpiWeek")
 library(EpiWeek)
 
 epiweek <- dateToEpiweek(masterdataset$date3, format = "%Y-%m-%d", firstday = "Sunday")
 
 masterdataset["epi_wk"] <- epiweek[2]
 
-
 masterdataset["epi_yr"] <- epiweek[1] # need to drop unused columns
-
 
 
 #weekly averages of temp
 
 temp_avg <- aggregate(masterdataset$tavg ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
-colnames(temp_avg) <- c("District", "Epi Year", "Epi Week", "Avg Temp (C)")
+colnames(temp_avg) <- c("District", "Epiyear", "Epiweek", "AvgTemp")
 
 # weekly averages of rainfall
 
-rain_avg <- aggregate(masterdataset$raint ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
-colnames(rain_avg) <- c("District", "Epi Year", "Epi Week", "Rainfall Total (mm/wk)")
+rain_avg <- aggregate(masterdataset$raint ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), sum)
+colnames(rain_avg) <- c("District", "Epi Year", "Epi Week", "RainTot")
 
 weather_data_by_epiweek <- cbind(temp_avg, rain_avg[4])
 
 #weekly averages of rel humidity
 
 rel_humidity_avg <- aggregate(masterdataset$rh ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
-colnames(rel_humidity_avg) <- c("District", "Epi Year", "Epi Week", "Relative humidity (%)")
+colnames(rel_humidity_avg) <- c("District", "Epi Year", "Epi Week", "RelativeHumidity")
 
 weather_data_by_epiweek <- cbind(weather_data_by_epiweek, rel_humidity_avg[4])
 
 #weekly averages of saturation vappor pressure deficit 
 
 sat_vap_press_def_avg <- aggregate(masterdataset$sd ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
-colnames(sat_vap_press_def_avg) <- c("District", "Epi Year", "Epi Week", "Saturation Vapor Pressure (mmHg) ")
+colnames(sat_vap_press_def_avg) <- c("District", "Epi Year", "Epi Week", "Saturation Vapor Pressure")
 
 weather_data_by_epiweek <- cbind(weather_data_by_epiweek, sat_vap_press_def_avg[4])
 
 # weekly averages of surface barometric pressure
 
 surf_baromet_press_avg <- aggregate(masterdataset$sd ,by=list(masterdataset$Districts, masterdataset$epi_yr, masterdataset$epi_wk), mean)
-colnames(surf_baromet_press_avg) <- c("District", "Epi Year", "Epi Week", "Surface Barometric Pressure (hPa) ")
+colnames(surf_baromet_press_avg) <- c("District", "Epiyear", "Epiweek", "Surface Barometric Pressure")
 
 weather_data_by_epiweek <- cbind(weather_data_by_epiweek, surf_baromet_press_avg[4])
+
+save(weather_data_by_epiweek, file = "~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/Weather Data by Epiweek.Rda")
+
+
+
+incidence <- read.csv("~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/incidence.csv")
+View(incidence)
+
+intervention <- read.csv("~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/intervention.csv")
+View(intervention)
+
+
+# take dashes out of district names so they match weather data
+incidence$District <-  sub("-", " ", incidence$District)
+
+
+# put district, epiyear, and epiweek in the same order to be merged 
+incidence_sorted <- incidence[order(incidence$District, incidence$Epiyear, incidence$Epiweek),] #this does what you want it to, overwrite inc data
+
+incidence <- incidence[order(incidence$District, incidence$Epiyear, incidence$Epiweek),]
+
+# reorder variables
+incidence <- incidence[c(1, 8, 2, 3, 4, 5, 6, 11, 7, 9, 10 )]
+incidence$District <- gsub("\\s+"," ", incidence$District)
+
+
+#Create Intevention Indicator Variables 
+Net_Intervention_IND <- ifelse(intervention$ITNyear =='NA', 0, 1)
+Spray_Intervention_IND <- ifelse(intervention$IRSepi =='NA', 0, 1)
+Spray_Intervention_IND[is.na(Spray_Intervention_IND)]=0
+intervention <- cbind(intervention, Net_Intervention_IND)
+intervention <-cbind(intervention, Spray_Intervention_IND)
+
+intervention <- intervention[c(1,2,3,7,4,5,6)]
+
+# NET: Separate interventions and rename to merge w/ incidence 
+Net_Intervention <- intervention[c(1,7,4,5)]
+Net_Intervention <- Net_Intervention[c(1,4,2,3)]
+colnames(Net_Intervention) <- c("Distcode", "Epiyear", "Epiweek", "Net_Intervention_IND")
+
+
+# SPRAY: Separate internentions and rename to merge w/ incidence 
+spray_int <- intervention[c(1,2,3,4)]
+colnames(spray_int) <-c("Distcode", "Epiyear", "Epiweek", "Spray_Intervention_IND")
+
+# merge incidence and net intervention data
+incidence_net <- merge(incidence, Net_Intervention, by.x = c("DISTCODE", "Epiyear", "Epiweek"), by.y = c("Distcode", "Epiyear", "Epiweek"), all - TRUE, all.x = T)
+
+incidence_net <- incidence_net[c(1,5,2,3,4,6,7,8,9,10,11,12)]
+# merge incidence/net intervention with spray intervention 
+incidence_net_spray <- merge(incidence_net, spray_int, by.x = c("DISTCODE", "Epiyear", "Epiweek"), by.y = c("Distcode", "Epiyear", "Epiweek"), all = T, all.x = T, all.y = T)
+
+
+
+
+incidence_net_spray <- incidence_net_spray[c(1,4,2,3,5, 6,7,8,9,10,11,12,13)]
+weather_data <- weather_data_by_epiweek[c(1,2,3,4,5,6,7,8)]
+
+# all incidence, intervention, and weather data merged 
+incidence_net_spray_int_weather_data <- merge(incidence_net_spray, weather_data, by.x =c("District", "Epiyear", "Epiweek"), by.y = c("District", "Epiyear", "Epiweek"), all = T, all.x = T, all.y = T)
+
+# create incidence variable
+incidence_net_spray_int_weather_data$MalarIncidence <- (incidence_net_spray_int_weather_data$cases/incidence_net_spray_int_weather_data$u5total)*1000
+
+save(incidence_net_spray_int_weather_data, file = "~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/Incidence Spray NET Weather Data.Rda")
+
+
+# create decay for NETS 
+  # from 1 to 0.6 effectiveness -> 96 weeks -> decay rate per week is 0.00417
+f.eff <- splinefun(x.val,y.val,method="natural")
+
+efficacy.net <- function(x) {
+   if(x<0) stop("x cannot be negative")
+  if(x>240) {
+    return(0)
+  } else {
+    1-0.00417*x
+  }
+}
+efficacy.net <- Vectorize(efficacy.net,"x")
+
+curve(efficacy.net(x),xlim=c(0,240), ylim = c(0,1))
+
+
+incidence_net_spray_int_weather_data$time <- (incidence_net_spray_int_weather_data$Epiyear-2010)*52+incidence_net_spray_int_weather_data$Epiweek
+
+n.distr <- length(unique(incidence_net_spray_int_weather_data$DISTCODE))
+
+unique.distcode <- unique(incidence_net_spray_int_weather_data$DISTCODE)
+for(i in 1:n.distr) {
+  ind.i <- which(incidence_net_spray_int_weather_data$DISTCODE==unique.distcode[i])
+  ind.ITN <- which(incidence_net_spray_int_weather_data[ind.i,]$Net_Intervention_IND==1)
+  if(length(ind.ITN)>0) {
+    ind.sort <- sort.list(incidence_net_spray_int_weather_data[ind.i,][ind.ITN,]$time)
+    min.t <- min(incidence_net_spray_int_weather_data[ind.i,][ind.ITN,][ind.sort,]$time)
+    incidence_net_spray_int_weather_data[ind.i,][ind.ITN,][ind.sort,]$Net_Intervention_IND <- efficacy.net(incidence_net_spray_int_weather_data[ind.i,][ind.ITN,][ind.sort,]$time-min.t)
+  }
+}
+
+# create decay for SPRAY 
+# from 1 to 0.75 effectiveness -> 24 weeks -> decay rate per week is 0.0104
+f.eff <- splinefun(x.val,y.val,method="natural")
+
+efficacy.spray <- function(x) {
+  if(x<0)stop("x cannot be negative")
+  if(x>96) {
+    return(0)
+  } else {
+    1-0.0104*x
+  }
+}
+efficacy.spray <- Vectorize(efficacy.spray,"x")
+
+curve(efficacy.spray(x),xlim=c(0,96), ylim = c(0,1))
+
+incidence_net_spray_int_weather_data$time <- (incidence_net_spray_int_weather_data$Epiyear-2010)*52+incidence_net_spray_int_weather_data$Epiweek
+
+n.distr <- length(unique(incidence_net_spray_int_weather_data$DISTCODE))
+
+unique.distcode <- unique(incidence_net_spray_int_weather_data$DISTCODE)
+for(i in 1:n.distr) {
+  ind.i <- which(incidence_net_spray_int_weather_data$DISTCODE==unique.distcode[i])
+  ind.SPR <- which(incidence_net_spray_int_weather_data[ind.i,]$Spray_Intervention_IND==1)
+  if(length(ind.SPR)>0) {
+    ind.sort <- sort.list(incidence_net_spray_int_weather_data[ind.i,][ind.SPR,]$time)
+    min.t <- min(incidence_net_spray_int_weather_data[ind.i,][ind.SPR,][ind.sort,]$time)
+    incidence_net_spray_int_weather_data[ind.i,][ind.SPR,][ind.sort,]$Spray_Intervention_IND <- efficacy.spray(incidence_net_spray_int_weather_data[ind.i,][ind.ITN,][ind.sort,]$time-min.t)
+  }
+}
+
+
+# create lag variabels: This time is typically thought to be 2, 4 or 8 weeks from the day the person showed up in the health center. 
+# You are expected to create the lagged variables and explore their relationships with malaria incidence.
+
+# create 2 week lag
+lag2df <- incidence_net_spray_int_weather_data [c("District", "Epiyear", "Epiweek", "AvgTemp", "RainTot", "time")]
+lag2df$timelag2 <- lag2df$time-2
+colnames(lag2df) <- c("District", "Epiyear", "Epiweek", "TavgLag2", "RainTotLag2", "NewCount", "TimeLag2")
+lag2df$NewCount <- NULL
+
+lag2df <- subset(lag2df, lag2df$TimeLag2 >= 0)
+
+# merge lag2 with DF 
+incidence_net_spray_int_weather_data <- merge(incidence_net_spray_int_weather_data, lag2df, by = c("District", "Epiyear","Epiweek"), all = TRUE)
+
+# create 4 week lag
+lag4df <- incidence_net_spray_int_weather_data [c("District", "Epiyear", "Epiweek", "AvgTemp", "RainTot", "time")]
+lag4df$TimeLag4 <- lag4df$time-4
+colnames(lag4df) <- c("District", "Epiyear", "Epiweek", "TavgLag4", "RainTotLag4", "NewCount", "TimeLag4")
+lag4df$NewCount <- NULL
+
+lag4df <- subset(lag4df, lag4df$TimeLag4 >= 0)
+
+# merge lag4 with DF
+incidence_net_spray_int_weather_data <- merge(incidence_net_spray_int_weather_data, lag4df, by = c("District", "Epiyear","Epiweek"), all = TRUE)
+
+# create 8 week lag
+lag8df <- incidence_net_spray_int_weather_data [c("District", "Epiyear", "Epiweek", "AvgTemp", "RainTot", "time")]
+lag8df$timelag8 <- lag8df$time-8
+colnames(lag8df) <- c("District", "Epiyear", "Epiweek", "TavgLag8", "RainTotLag8", "NewCount", "TimeLag8")
+lag8df$NewCount <- NULL
+
+lag8df <- subset(lag8df, lag8df$TimeLag8 >= 0)
+
+shift <- function(x, n){
+  c(x[-(seq(n))], rep(NA, n))
+}
+
+# inc$TavgLag2 <- shift(inc$TavgLag2, 1)
+# inc$RainTotLag2 <- shift(inc$RainTotLag2,1)
+# inc$TimeLag2 <- shift( inc$TimeLag2, 3)
+
+
+# inc$TavgLag4 <- shift(inc$TavgLag4, 3)
+# inc$RainTotLag4 <- shift(inc$RainTotLag4,3)
+# inc$TimeLag4 <- shift( inc$TimeLag4, 7)
+
+# inc$TavgLag8 <- shift(inc$TavgLag8, 7)
+# inc$RainTotLag8 <- shift(inc$RainTotLag8,7)
+# inc$TimeLag8 <- shift( inc$TimeLag8, 8)
+
+
+
+
+# merge lag8 with DF
+incidence_net_spray_int_weather_data <- merge(incidence_net_spray_int_weather_data, lag8df, by = c("District", "Epiyear","Epiweek"), all = TRUE)
+
+inc <- subset(incidence_net_spray_int_weather_data, incidence_net_spray_int_weather_data$Epiyear >2009)
+
+save(inc, file = "~/Dropbox/CSPH/Fall 2017/BIOS 6640 R and Python for Data Science/Project/Project Data Clean.Rda")
+
+
+
+
+
+
+
+
 
